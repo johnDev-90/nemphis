@@ -3,9 +3,15 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class UserService {
-    constructor(private prisma : PrismaService){}
+  constructor(private prisma: PrismaService) {}
 
-    findUsers(){
-        return this.prisma.users.findMany()
-    }
+  findUsers() {
+    return this.prisma.users.findMany();
+  }
+
+  create_user(data) {
+    return this.prisma.users.create({
+      data: data,
+    });
+  }
 }

@@ -1,29 +1,40 @@
-import { IsBoolean, isDecimal, IsInt, IsNotEmpty, IsNumber, isString, IsString } from "class-validator";
-
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  isDecimal,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  isString,
+  IsString,
+} from 'class-validator';
 
 export class ProductsDto {
-    @IsString()
-    @IsNotEmpty()
-    name: string
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-    @IsString()
-    @IsNotEmpty()
-    description:string
+  @IsString()
+  @IsNotEmpty()
+  description: string;
 
-    @IsNotEmpty()
-    @IsNumber({maxDecimalPlaces:2})
-    price:number
+  @Type(() => Number)
+  @IsNotEmpty()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  price: number;
 
-    @IsNotEmpty()
-    @IsNumber()
-    stock:number
-    
-    @IsBoolean()
-    @IsNotEmpty()
-    isActive:boolean
+  @Type(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
+  stock: number;
 
-    @IsInt()
-    @IsNotEmpty()
-    categoryId: number
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsNotEmpty()
+  isActive: boolean;
 
+  @Type(() => Number)
+  @IsInt()
+  @IsNotEmpty()
+  categoryId: number;
 }

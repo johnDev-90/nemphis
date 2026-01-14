@@ -21,6 +21,8 @@ model Users {
   phone_number Int 
   is_guest Boolean
   created_at DateTime @default(now())
+
+  orders Order[]
 }
 
 model Category {
@@ -41,6 +43,38 @@ model Products {
   created_at DateTime @default(now())
   categoryId Int?
   category Category? @relation(fields: [categoryId], references: [id])
+  imgUrl String?
+
+  items OrderItems[]
+
+}
+
+
+
+
+
+model Order {
+  id Int @id @default(autoincrement()) @unique
+  userId Int?
+  total Decimal
+  created_at DateTime @default(now())
+
+  user Users? @relation(fields: [userId],references: [id])
+  items OrderItems[]
+
+}
+
+model OrderItems {
+  id Int @id @unique @default(autoincrement())
+  quantity Int
+
+  productId Int
+  product Products @relation(fields: [productId],references: [id])
+
+  orderId Int
+  order Order @relation(fields: [orderId],references: [id])
+ 
+
 
 }
 

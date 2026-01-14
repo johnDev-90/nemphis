@@ -1,37 +1,53 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ProductsService } from './products.service.js';
 import { ProductsDto } from './DTO/products.dto.js';
 import { UpdateProductsDto } from './DTO/updateProducts.dto.js';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
-    constructor(private product : ProductsService){}
-    
+  constructor(private product: ProductsService) {}
 
-    @Get()
-    findAllProducts(){
-        return this.product.findAllProducts();
-    }
+  @Get()
+  findAllProducts() {
+    return this.product.findAllProducts();
+  }
 
-    @Get(':id')
-    getProductsByCategories(@Param('id', ParseIntPipe) id:number){
-        return this.product.getProducts_byCat(id)
+  @Get(':id')
+  getProductsByCategories(@Param('id', ParseIntPipe) id: number) {
+    return this.product.getProducts_byCat(id);
+  }
 
-    }
+  @Post()
+  @UseInterceptors(FileInterceptor('image'))
+  createNewProduct(
+    @Body() data: ProductsDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.product.createPoduct(data, file);
+  }
 
+  @Put(':id')
+  updateProductbyId(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatedProduct: UpdateProductsDto,
+  ) {
+    return this.product.updateProduct(id, updatedProduct);
+  }
 
-    @Post()
-    createNewProduct(@Body() data : ProductsDto){
-       return this.product.createPoduct(data)
-    }
-
-    @Put(':id')
-       updateProductbyId(@Param('id',ParseIntPipe) id:number, @Body() updatedProduct:UpdateProductsDto){
-      return this.product.updateProduct(id, updatedProduct)
-    }
-
-    @Delete(':id')
-    deleteProduct(@Param('id',ParseIntPipe) id:number){
-        return this.product.deleteProductById(+id)
-    }
+  @Delete(':id')
+  deleteProduct(@Param('id', ParseIntPipe) id: number) {
+    return this.product.deleteProductById(+id);
+  }
 }
